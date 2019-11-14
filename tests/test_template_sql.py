@@ -1,0 +1,34 @@
+import pathlib
+import re
+import sqlite_utils
+import pytest
+from .utils import make_app_client
+
+
+@pytest.fixture
+def client(tmpdir):
+    dogs = str(pathlib.Path(tmpdir / "dogs.db"))
+    news = str(pathlib.Path(tmpdir / "news.db"))
+    sqlite_utils.Database(dogs)["dogs"].insert_all([{"name": "Cleo"}])
+    sqlite_utils.Database(news)["articles"].insert_all(
+        [
+            {"date": "2018-01-01", "headline": "First post"},
+            {"date": "2018-02-01", "headline": "Post the second"},
+        ]
+    )
+    return make_app_client([dogs, news])
+
+
+def test_sql_against_named_database(client):
+    response = client.get("/news")
+    stripped = re.sub(r"\s+", " ", response.text)
+    assert (
+        '<h3>Post the second</h2> <p class="date">2018-02-01</p> '
+        '<h3>First post</h2> <p class="date">2018-01-01</p>'
+    ) in stripped
+
+
+def test_sql_against_default_database(client):
+    response = client.get("/")
+    stripped = re.sub(r"\s+", " ", response.text)
+    assert "<pre> type: table<br> name: dogs<br> </pre>" in stripped

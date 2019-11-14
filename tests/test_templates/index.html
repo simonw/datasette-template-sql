@@ -1,0 +1,12 @@
+{% extends "default:index.html" %}
+
+{% block content %}
+<pre>
+{% for row in sql("select type, name from sqlite_master") %}
+    {% for key in row.keys() %}
+        {{ key }}: {{ row[key] }}<br>
+    {% endfor %}
+{% endfor %}
+</pre>
+{{ super() }}
+{% endblock %}

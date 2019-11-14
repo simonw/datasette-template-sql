@@ -1,0 +1,14 @@
+{% extends "default:database.html" %}
+
+{% block content %}
+
+{% for article in sql(
+    "select headline, date from articles order by date desc limit 5",
+    "news"
+) %}
+    <h3>{{ article.headline }}</h2>
+    <p class="date">{{ article.date }}</p>
+{% endfor %}
+
+{{ super() }}
+{% endblock %}

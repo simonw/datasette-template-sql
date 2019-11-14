@@ -23,7 +23,7 @@ setup(
     version=VERSION,
     packages=["datasette_template_sql"],
     entry_points={"datasette": ["template-sql = datasette_template_sql"]},
-    install_requires=["datasette"],
+    install_requires=["datasette~=0.32"],
     extras_require={"test": ["pytest", "asgiref", "sqlite-utils"]},
     tests_require=["datasette-template-sql[test]"],
 )

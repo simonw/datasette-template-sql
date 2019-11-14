@@ -1,7 +1,5 @@
 from datasette import hookimpl
 
-import jinja2
-
 
 @hookimpl
 def extra_template_vars(datasette, database):

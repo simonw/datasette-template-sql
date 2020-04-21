@@ -29,6 +29,7 @@ def app(tmpdir):
 async def test_sql_against_named_database(app):
     async with httpx.AsyncClient(app=app) as client:
         response = await client.get("http://localhost/news")
+        assert 200 == response.status_code
         stripped = re.sub(r"\s+", " ", response.text)
         assert (
             '<h3>Post the second</h2> <p class="date">2018-02-01</p> '
@@ -40,5 +41,20 @@ async def test_sql_against_named_database(app):
 async def test_sql_against_default_database(app):
     async with httpx.AsyncClient(app=app) as client:
         response = await client.get("http://localhost/")
+        assert 200 == response.status_code
         stripped = re.sub(r"\s+", " ", response.text)
         assert "<pre> type: table<br> name: dogs<br> </pre>" in stripped
+
+
+@pytest.mark.asyncio
+async def test_sql_with_arguments(app):
+    async with httpx.AsyncClient(app=app) as client:
+        response = await client.get("http://localhost/news")
+        assert 200 == response.status_code
+        stripped = re.sub(r"\s+", " ", response.text)
+        # The h4 elements use a `?` parameter
+        assert "<h4>First post</h4>" not in stripped
+        assert "<h4>Post the second</h4>" in stripped
+        # The h5 elements use a `:date` parameter
+        assert "<h5>First post</h5>" not in stripped
+        assert "<h5>Post the second</h5>" in stripped

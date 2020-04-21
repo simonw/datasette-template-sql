@@ -4,10 +4,28 @@
 
 {% for article in sql(
     "select headline, date from articles order by date desc limit 5",
-    "news"
+    database="news"
 ) %}
     <h3>{{ article.headline }}</h2>
     <p class="date">{{ article.date }}</p>
+{% endfor %}
+
+Demo of arguments:
+
+{% for article in sql(
+    "select headline, date from articles where date = ?",
+    ["2018-02-01"],
+    database="news"
+) %}
+    <h4>{{ article.headline }}</h4>
+{% endfor %}
+
+{% for article in sql(
+    "select headline, date from articles where date = :date",
+    {"date": "2018-02-01"},
+    database="news"
+) %}
+    <h5>{{ article.headline }}</h5>
 {% endfor %}
 
 {{ super() }}

@@ -6,6 +6,14 @@
 
 Datasette plugin for executing SQL queries from templates.
 
+## Installation
+
+Run this command to install the plugin in the same environment as Datasette:
+
+    $ pip install datasette-template-sql
+
+## Usage
+
 This plugin makes a new function, `sql(sql_query)`, available to your Datasette templates.
 
 You can use it like this:
@@ -20,12 +28,42 @@ You can use it like this:
 
 The plugin will execute SQL against the current database for the page in  `database.html`, `table.html` and `row.html` templates. If a template does not have a current database (`index.html` for example) the query will execute against the first attached database.
 
-You can pass an optional second argument to specify a named database to use for the query. For example, if you have attached a `news.db` database you could use this:
+### Queries with arguments
+
+You can construct a SQL query using `?` or `:name` parameter syntax by passing a list or dictionary as a second argument:
+
+```html+jinja
+{% for row in sql("select distinct topic from til order by topic") %}
+    <h2>{{ row.topic }}</h2>
+    <ul>
+        {% for til in sql("select * from til where topic = ?", [row.topic]) %}
+            <li><a href="{{ til.url }}">{{ til.title }}</a> - {{ til.created[:10] }}</li>
+        {% endfor %}
+    </ul>
+{% endfor %}
+```
+
+Here's the same example using the `:topic` style of parameters:
+
+```html+jinja
+{% for row in sql("select distinct topic from til order by topic") %}
+    <h2>{{ row.topic }}</h2>
+    <ul>
+        {% for til in sql("select * from til where topic = :topic", {"topic": row.topic}) %}
+            <li><a href="{{ til.url }}">{{ til.title }}</a> - {{ til.created[:10] }}</li>
+        {% endfor %}
+    </ul>
+{% endfor %}
+```
+
+### Querying a different database
+
+You can pass an optional `database=` argument to specify a named database to use for the query. For example, if you have attached a `news.db` database you could use this:
 
 ```html+jinja
 {% for article in sql(
     "select headline, date, summary from articles order by date desc limit 5",
-    "news"
+    database="news"
 ) %}
     <h3>{{ article.headline }}</h2>
     <p class="date">{{ article.date }}</p>

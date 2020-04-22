@@ -6,6 +6,12 @@
 
 Datasette plugin for executing SQL queries from templates.
 
+## Examples
+
+[www.niche-museums.com](https://www.niche-museums.com/) uses this plugin to run a custom themed website on top of Datasette. The full source code for the site [is here](https://github.com/simonw/museums) - see also [niche-museums.com, powered by Datasette](https://simonwillison.net/2019/Nov/25/niche-museums/).
+
+[simonw/til](https://github.com/simonw/til) is another simple example, described in [Using a self-rewriting README powered by GitHub Actions to track TILs](https://simonwillison.net/2020/Apr/20/self-rewriting-readme/).
+
 ## Installation
 
 Run this command to install the plugin in the same environment as Datasette:

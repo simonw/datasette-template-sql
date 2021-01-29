@@ -1,8 +1,10 @@
 # datasette-template-sql
 
 [![PyPI](https://img.shields.io/pypi/v/datasette-template-sql.svg)](https://pypi.org/project/datasette-template-sql/)
-[![CircleCI](https://circleci.com/gh/simonw/datasette-template-sql.svg?style=svg)](https://circleci.com/gh/simonw/datasette-template-sql)
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/simonw/datasette-template-sql/blob/master/LICENSE)
+[![Changelog](https://img.shields.io/github/v/release/simonw/datasette-template-sql?include_prereleases&label=changelog)](https://github.com/simonw/datasette-template-sql/releases)
+[![Tests](https://github.com/simonw/datasette-template-sql/workflows/Test/badge.svg)](https://github.com/simonw/datasette-template-sql/actions?query=workflow%3ATest)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/simonw/datasette-template-sql/blob/main/LICENSE)
+
 
 Datasette plugin for executing SQL queries from templates.
 

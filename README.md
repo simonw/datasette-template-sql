@@ -5,7 +5,6 @@
 [![Tests](https://github.com/simonw/datasette-template-sql/workflows/Test/badge.svg)](https://github.com/simonw/datasette-template-sql/actions?query=workflow%3ATest)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/simonw/datasette-template-sql/blob/main/LICENSE)
 
-
 Datasette plugin for executing SQL queries from templates.
 
 ## Examples

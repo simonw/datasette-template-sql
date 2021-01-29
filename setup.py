@@ -1,7 +1,7 @@
 from setuptools import setup
 import os
 
-VERSION = "1.0.1"
+VERSION = "1.0.2"
 
 
 def get_long_description():
@@ -19,11 +19,17 @@ setup(
     long_description_content_type="text/markdown",
     author="Simon Willison",
     url="https://github.com/simonw/datasette-template-sql",
+    project_urls={
+        "Issues": "https://github.com/simonw/datasette-template-sql/issues",
+        "CI": "https://github.com/simonw/datasette-template-sql/actions",
+        "Changelog": "https://github.com/simonw/datasette-template-sql/releases",
+    },
     license="Apache License, Version 2.0",
     version=VERSION,
     packages=["datasette_template_sql"],
     entry_points={"datasette": ["template-sql = datasette_template_sql"]},
     install_requires=["datasette>=0.54"],
-    extras_require={"test": ["pytest", "pytest-asyncio", "httpx", "sqlite-utils"]},
+    extras_require={"test": ["pytest", "pytest-asyncio", "sqlite-utils"]},
     tests_require=["datasette-template-sql[test]"],
+    python_requires=">=3.6",
 )

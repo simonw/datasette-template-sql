@@ -1,4 +1,3 @@
-import httpx
 import pathlib
 import pytest
 import re
@@ -7,7 +6,7 @@ from datasette.app import Datasette
 
 
 @pytest.fixture
-def app(tmpdir):
+def ds(tmpdir):
     dogs = str(pathlib.Path(tmpdir / "dogs.db"))
     news = str(pathlib.Path(tmpdir / "news.db"))
     sqlite_utils.Database(dogs)["dogs"].insert_all([{"name": "Cleo"}])
@@ -22,39 +21,36 @@ def app(tmpdir):
         immutables=[],
         template_dir=str(pathlib.Path(__file__).parent / "test_templates"),
     )
-    return ds.app()
+    return ds
 
 
 @pytest.mark.asyncio
-async def test_sql_against_named_database(app):
-    async with httpx.AsyncClient(app=app) as client:
-        response = await client.get("http://localhost/news")
-        assert 200 == response.status_code
-        stripped = re.sub(r"\s+", " ", response.text)
-        assert (
-            '<h3>Post the second</h2> <p class="date">2018-02-01</p> '
-            '<h3>First post</h2> <p class="date">2018-01-01</p>'
-        ) in stripped
+async def test_sql_against_named_database(ds):
+    response = await ds.client.get("/news")
+    assert 200 == response.status_code
+    stripped = re.sub(r"\s+", " ", response.text)
+    assert (
+        '<h3>Post the second</h2> <p class="date">2018-02-01</p> '
+        '<h3>First post</h2> <p class="date">2018-01-01</p>'
+    ) in stripped
 
 
 @pytest.mark.asyncio
-async def test_sql_against_default_database(app):
-    async with httpx.AsyncClient(app=app) as client:
-        response = await client.get("http://localhost/")
-        assert 200 == response.status_code
-        stripped = re.sub(r"\s+", " ", response.text)
-        assert "<pre> type: table<br> name: dogs<br> </pre>" in stripped
+async def test_sql_against_default_database(ds):
+    response = await ds.client.get("/")
+    assert 200 == response.status_code
+    stripped = re.sub(r"\s+", " ", response.text)
+    assert "<pre> type: table<br> name: dogs<br> </pre>" in stripped
 
 
 @pytest.mark.asyncio
-async def test_sql_with_arguments(app):
-    async with httpx.AsyncClient(app=app) as client:
-        response = await client.get("http://localhost/news")
-        assert 200 == response.status_code
-        stripped = re.sub(r"\s+", " ", response.text)
-        # The h4 elements use a `?` parameter
-        assert "<h4>First post</h4>" not in stripped
-        assert "<h4>Post the second</h4>" in stripped
-        # The h5 elements use a `:date` parameter
-        assert "<h5>First post</h5>" not in stripped
-        assert "<h5>Post the second</h5>" in stripped
+async def test_sql_with_arguments(ds):
+    response = await ds.client.get("/news")
+    assert 200 == response.status_code
+    stripped = re.sub(r"\s+", " ", response.text)
+    # The h4 elements use a `?` parameter
+    assert "<h4>First post</h4>" not in stripped
+    assert "<h4>Post the second</h4>" in stripped
+    # The h5 elements use a `:date` parameter
+    assert "<h5>First post</h5>" not in stripped
+    assert "<h5>Post the second</h5>" in stripped

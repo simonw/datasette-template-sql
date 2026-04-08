@@ -1,6 +1,6 @@
 [project]
 name = "datasette-template-sql"
-version = "1.0.2"
+version = "1.0.3"
 description = "Datasette plugin for executing SQL queries from templates"
 readme = "README.md"
 authors = [{name = "Simon Willison"}]

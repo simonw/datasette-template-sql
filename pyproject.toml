@@ -1,0 +1,34 @@
+[project]
+name = "datasette-template-sql"
+version = "1.0.2"
+description = "Datasette plugin for executing SQL queries from templates"
+readme = "README.md"
+authors = [{name = "Simon Willison"}]
+license = "Apache-2.0"
+requires-python = ">=3.10"
+dependencies = [
+    "datasette>=0.54",
+]
+
+[project.urls]
+Homepage = "https://github.com/simonw/datasette-template-sql"
+Changelog = "https://github.com/simonw/datasette-template-sql/releases"
+Issues = "https://github.com/simonw/datasette-template-sql/issues"
+CI = "https://github.com/simonw/datasette-template-sql/actions"
+
+[project.entry-points.datasette]
+template-sql = "datasette_template_sql"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0",
+    "pytest-asyncio>=0.21",
+    "sqlite-utils>=3.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.9.18,<0.12.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-root = ""
